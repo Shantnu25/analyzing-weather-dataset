@@ -1,12 +1,10 @@
-# --------------
 #Importing the modules
 import pandas as pd
 import numpy as np
 from scipy.stats import mode 
 
-
-
 #Code for categorical variable
+
 def categorical(df):
     """ Extract names of categorical column
     
@@ -23,10 +21,9 @@ def categorical(df):
 
     return categorical_var
 
- 
-
 
 #Code for numerical variable
+
 def numerical(df):
     """ Extract names of numerical column
     
@@ -43,9 +40,8 @@ def numerical(df):
     return numerical_var
 
 
-
-
 #code to check distribution of variable
+
 def clear(df,col,val):
     """ Check distribution of variable
     
@@ -64,9 +60,8 @@ def clear(df,col,val):
     return value_counts
    
 
-
-
 #Code to check instances based on the condition
+
 def instances_based_condition(df,col1,val1,col2,val2):
     """ Instances based on the condition
     
@@ -86,9 +81,6 @@ def instances_based_condition(df,col1,val1,col2,val2):
     instance=df[(df[col1]>val1) & (df[col2]==val2)]
     return instance
     
-    
-
-
 
 # Code to calculate different aggreagted values according to month
 
@@ -108,12 +100,16 @@ def agg_values_ina_month(df,date_col,agg_col, agg):
     aggregated_value - Generated pivot table
     """
     df[date_col] = pd.to_datetime(df[date_col])
+    
     aggregate = {'mean':np.mean,'max':np.max,'min':np.min,'sum':np.sum,'len':len}
+    
     aggregated_value = df.pivot_table(values=[agg_col], index=df[date_col].dt.month,aggfunc={agg_col:aggregate[agg]})
+    
     return aggregated_value
 
 
 # Code to group values based on the feature
+
 def group_values(df,col1,agg1):
     """ Agrregate values by grouping
     
@@ -132,9 +128,8 @@ def group_values(df,col1,agg1):
     return grouping
     
 
+# function for convert temperatures
 
-
-# function for conversion 
 def convert(df,celsius):
     """ Convert temperatures from celsius to fahrenhheit
     
@@ -153,53 +148,53 @@ def convert(df,celsius):
     return converted_temp
 
 
-# Load the weather_2012 data csv file and store it in weather variable. The path of the dataset has been stored in the variable `path` for you.
+#1 Load the weather_2012 data csv file and storing it in weather variable.
+
 weather=pd.read_csv(path)
 print(weather.head())
-print('--------------------------------------------------')
-print(weather.info())
-print('--------------------------------------------------')
 
-# As you have now loaded the weather data you might want to check the categorical and numerical variables. You can check it by calling categorical and numerical function. 
+print(weather.info())
+
+#2 Checking the categorical and numerical variables by calling categorical and numerical function. 
+
 print(categorical(weather))
-print('--------------------------------------------------')
 
 print(numerical(weather))
-print('--------------------------------------------------')
 
 
+#3 Checking the distribution of a specific value like the number of times the weather was exactly Cloudy in the given column.
 
+#Checking it by calling the function clear with respective parameters.
 
-#You might be interested in checking the distribution of a specific value like the number of times the weather was exactly Cloudy in the given column. Feel free to check on other values.
-#You can check it by calling the function clear with respective parameters.
-#By using index of the value or name of the value you can check the number of count
+#By using index of the value or name of the value, we can check the number of count
 print(clear(weather,'Weather','Cloudy'))
-print('--------------------------------------------------')
 
-# Now suppose you want to check some instances based on a specific condition like when the wind speed was above 35 and visibility was 25. You can dicretly check it by calling the function instances_based_condition with respective parameters.
+#4 Now suppose we want to check some instances based on a specific condition like when the wind speed was above 35 and visibility was 25. 
 
+#Checking it by calling the function instances_based_condition with respective parameters.
 wind_speed_35_vis_25=instances_based_condition(weather,'Wind Spd (km/h)',35,'Visibility (km)',25)
+
 print(wind_speed_35_vis_25.head())
-print('--------------------------------------------------')
 
-#You have temperature data and want to calculate the mean temperature recorded by month.You can generate a pivot table which contains the aggregated values(like mean, max ,min, sum, len) recoreded by month. 
-#You can call the function agg_values_ina_month with respective parameters. 
+#5 We have temperature data and want to calculate the mean temperature recorded by month.
 
+#generating a pivot table which contains the aggregated values(like mean, max ,min, sum, len) recoreded by month. 
+
+#calling the function agg_values_ina_month with respective parameters. 
 agg_values_ina_month(weather,'Date/Time','Dew Point Temp (C)','mean')
+
 print(agg_values_ina_month(weather,'Date/Time','Dew Point Temp (C)','mean'))
-print('--------------------------------------------------')
 
 
-# To groupby based on a column like you want to groupby on Weather column and then aggregate the mean values of each column for different types of weather using mean. You can call the function group_values.
-# Feel free to try on diffrent aggregated functions like max, min, sum, len
+#6 To groupby based on a column like you want to groupby on Weather column and then aggregate the mean values of each column for different types of weather using mean. 
+
+#calling the function group_values with aggregated functions like max, min, sum, len.
 mean_weather=group_values(weather,'Weather','mean')
-print('--------------------------------------------------')
 
-# You have a temperature data and wanted to convert celsius temperature into fahrehheit temperatures you can call the function convert.
+#7 We have a temperature data and wanted to convert celsius temperature into fahrehheit temperatures 
+
+#calling the function convert.
 weather_fahrehheit=convert(weather,'Temp (C)')
-
-
-
 
 
 
